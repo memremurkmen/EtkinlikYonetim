@@ -1,0 +1,74 @@
+﻿@model IEnumerable<EtkinlikYonetim.Models.EyEtkinlik>
+
+@{
+    ViewData["Title"] = "Etkinlikler";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p>
+    <a asp-action="EtkinlikOlustur">Yeni Etkinlik Oluştur</a>
+</p>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>
+                Etkinlik Adı
+            </th>
+            <th>
+                Max Katılımcı Sayısı
+            </th>
+            <th>
+                Başlangıç Tarihi
+            </th>
+            <th>
+                Bitiş Tarihi
+            </th>
+            <th>
+                Güncellenme Tarihi
+            </th>
+            <th>
+                Silinme Tarihi
+            </th>
+            <th>
+                Silindi
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EtkinlikAdi)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaxKatilimciSayisi)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BaslangicTarihi)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BitisTarihi)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.updateDate)
+                </td>
+                <td>
+                    @if (item.deleteDate != null)
+                    {
+                        @Html.DisplayFor(modelItem => item.deleteDate)
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.isDeleted)
+                </td>
+                <td>
+                    <a asp-action="EtkinlikDuzenle" asp-route-id="@item.EtkinlikId">Düzenle</a> |
+                    <a asp-action="EtkinlikDetay" asp-route-id="@item.EtkinlikId">Detay</a> |
+                    <a asp-action="EtkinlikSil" asp-route-id="@item.EtkinlikId">Sil</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

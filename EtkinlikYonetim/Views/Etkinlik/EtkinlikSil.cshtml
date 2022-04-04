@@ -1,0 +1,86 @@
+﻿@model EtkinlikYonetim.Models.EyEtkinlik
+
+@{
+    ViewData["Title"] = "Etkinlik Sil";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Etkinliği silmek istediğinize emin misiniz?</h3><br />
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            <label>Etkinlik Adı</label>
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.EtkinlikAdi)
+        </dd>
+        <dt class="col-sm-2">
+            <label>Max Katılımcı Sayısı</label>
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MaxKatilimciSayisi)
+        </dd>
+        <dt class="col-sm-2">
+            <label>Başlangıç Tarihi</label>
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.BaslangicTarihi)
+        </dd>
+        <dt class="col-sm-2">
+            <label>Bitiş Tarihi</label>
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.BitisTarihi)
+        </dd>
+        <dt class="col-sm-2">
+            <label>Davetliler</label>
+        </dt>
+        <dd class="col-sm-5">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <td>
+                            <strong>Adı</strong>
+                        </td>
+                        <td>
+                            <strong>Soyadı</strong>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        EtkinlikYonetim.Models.EtkinlikYonetimContext db = new EtkinlikYonetim.Models.EtkinlikYonetimContext();
+                        var davetliler = (from ek in db.EyEtkinlikKullaniciEslesme
+                                      join e in db.EyEtkinlik
+                                      on ek.EtkinlikId equals e.EtkinlikId
+                                      join k in db.EyKullanici
+                                      on ek.KullaniciId equals k.KullaniciId
+                                      where ek.EtkinlikId == Model.EtkinlikId
+                                      select new EyKullanici
+                                      {
+                                         Ad = k.Ad,
+                                         Soyad = k.Soyad
+                                      }).ToList();
+                        foreach (var dvt in davetliler)
+                        {
+                            <tr>
+                                <td>
+                                    <a>@dvt.Ad</a>
+                                </td>
+                                <td>
+                                    <a>@dvt.Soyad</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </dd>
+    </dl>
+
+    <form asp-action="EtkinlikSil">
+        <input type="hidden" asp-for="EtkinlikId" />
+        <input type="submit" value="Sil" class="btn btn-danger" /> |
+        <a asp-action="Etkinlikler">Listeye geri dön</a>
+    </form>
+</div>

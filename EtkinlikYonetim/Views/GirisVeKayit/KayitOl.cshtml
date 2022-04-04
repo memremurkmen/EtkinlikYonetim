@@ -1,0 +1,76 @@
+﻿@model EtkinlikYonetim.Models.EyKullanici
+
+@{
+    ViewData["Title"] = "Kayıt Ol";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kayıt Ol</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <section class="ftco-section" style="margin-top: 5%;">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 text-center mb-5">
+                    <h2 class="heading-section">Etkinlik Yönetim</h2>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-4">
+                    <div class="login-wrap p-0">
+                        <form asp-action="KayitOl">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="Ad" class="control-label">Ad</label>
+                                <input asp-for="Ad" class="form-control" />
+                                <span asp-validation-for="Ad" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Soyad" class="control-label">Soyad</label>
+                                <input asp-for="Soyad" class="form-control" />
+                                <span asp-validation-for="Soyad" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="TelefonNo" class="control-label">Telefon No</label>
+                                <input asp-for="TelefonNo" pattern="[0-9]{10}" class="form-control" />
+                                <span asp-validation-for="TelefonNo" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="TcNo" class="control-label">TC No</label>
+                                <input asp-for="TcNo" pattern="[0-9]{11}" class="form-control" />
+                                <span asp-validation-for="TcNo" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Sifre" class="control-label">Sifre</label>
+                                <input asp-for="Sifre" type="password" class="form-control" />
+                                <span asp-validation-for="Sifre" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="Kayıt Ol" class="btn btn-primary" />
+                            </div>
+                        </form>
+                        <div class="form-group d-md-flex">
+                            <div class="w-150 text-md-right">
+                                <a href="GirisYap" style="color: #838181">Zaten hesabım var</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+</body>
+</html>

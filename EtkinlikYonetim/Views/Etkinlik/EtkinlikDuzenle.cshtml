@@ -1,0 +1,128 @@
+﻿@model EtkinlikDuzenleModel
+
+@{
+    ViewData["Title"] = "Etkinlik Düzenle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Etkinlik Düzenle</h1>
+<br />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EtkinlikDuzenle">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="@Model.activity.EtkinlikId" />
+            <div class="form-group">
+                <label asp-for="@Model.activity.EtkinlikAdi" class="control-label">Etkinlik Adı</label>
+                <input asp-for="@Model.activity.EtkinlikAdi" class="form-control" />
+                <span asp-validation-for="@Model.activity.EtkinlikAdi" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.activity.MaxKatilimciSayisi" class="control-label">Max Katılımcı Sayısı</label>
+                <input asp-for="@Model.activity.MaxKatilimciSayisi" class="form-control" />
+                <span asp-validation-for="@Model.activity.MaxKatilimciSayisi" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.activity.BaslangicTarihi" class="control-label">Başlangıç Tarihi</label>
+                <input asp-for="@Model.activity.BaslangicTarihi" class="form-control" />
+                <span asp-validation-for="@Model.activity.BaslangicTarihi" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.activity.BitisTarihi" class="control-label">Bitiş Tarihi</label>
+                <input asp-for="@Model.activity.BitisTarihi" class="form-control" />
+                <span asp-validation-for="@Model.activity.BitisTarihi" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Kaydet" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+    <div class="col-md-8">
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Davetliler</h4>
+            </div>
+            <div class="col-md-4 text-right">
+                <select id="userDropdown" class="form-control selectpicker" data-live-search="true">
+                    @{
+                        foreach (var item in Model.users)
+                        {
+                            <option data-tokens="@item.Ad @item.Soyad @item.TcNo" value="@item.KullaniciId">@item.Ad @item.Soyad TC:@item.TcNo</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-2 text-right">
+                <button class="btn btn-success" id="davetliEkleBtn" onclick="davetliEkleBtnClick()">Ekle</button>
+            </div>
+        </div>
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        <strong>Adı</strong>
+                    </th>
+                    <th>
+                        <strong>Soyadı</strong>
+                    </th>
+                    <th>
+                        <strong>TC No</strong>
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="davetliTablosu">
+                @{
+                    foreach (var item in Model.activitiesUsers)
+                    {
+                        <tr>
+                            <td>
+                                <a>@item.Kullanici.Ad</a>
+                            </td>
+                            <td>
+                                <a>@item.Kullanici.Soyad</a>
+                            </td>
+                            <td>
+                                <a>@item.Kullanici.TcNo</a>
+                            </td>
+                            <td>
+                                <a asp-action="DavetliSil" asp-route-id="@item.Kullanici.KullaniciId">Sil</a>
+                            </td>
+                        </tr>
+                    }
+                }
+
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Etkinlikler">Listeye geri dön</a>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+
+        function davetliEkleBtnClick() {
+            $.ajax({
+                url: "@Url.Action("DavetliEkle", "Etkinlik")",
+                type: 'POST',
+                data: { 'davetliId': document.getElementById("userDropdown").value },
+                success: function (response) {
+                    console.log("davetli ekleme tamamlandı");
+                    location.reload();
+                },
+                error: function (response) {
+                }
+            });
+            /*return window.alert(document.getElementById("davetliDropdown").value);*/
+        }
+
+
+    </script>
+
+}

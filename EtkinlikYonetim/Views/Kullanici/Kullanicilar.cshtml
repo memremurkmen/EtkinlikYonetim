@@ -1,0 +1,60 @@
+﻿@model IEnumerable<EtkinlikYonetim.Models.EyKullanici>
+
+@{
+    ViewData["Title"] = "Kullanicilar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Kullanıcılar</h1>
+
+<p>
+    <a asp-action="KullaniciOlustur">Yeni Kullanıcı Oluştur</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Ad
+            </th>
+            <th>
+                Soyad
+            </th>
+            <th>
+                Telefon No
+            </th>
+            <th>
+                TC No
+            </th>
+            <th>
+                Yetki
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ad)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Soyad)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TelefonNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TcNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Yetki)
+            </td>
+            <td>
+                <a asp-action="KullaniciDuzenle" asp-route-id="@item.KullaniciId">Düzenle</a> |
+                <a asp-action="KullaniciDetay" asp-route-id="@item.KullaniciId">Detay</a> |
+                <a asp-action="KullaniciSil" asp-route-id="@item.KullaniciId">Sil</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,105 @@
+﻿@model EtkinlikYonetim.Models.EyEtkinlik
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewData["Title"] = "Etkinlik Detay";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Etkinlik Detay</h1>
+<br />
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            Etkinlik Adı
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.EtkinlikAdi)
+        </dd>
+        <dt class="col-sm-2">
+            Max Katılımcı Sayısı
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MaxKatilimciSayisi)
+        </dd>
+        <dt class="col-sm-2">
+            Başlangıç Tarihi
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.BaslangicTarihi)
+        </dd>
+        <dt class="col-sm-2">
+            Bitiş Tarihi
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.BitisTarihi)
+        </dd>
+        <dt class="col-sm-2">
+            Qr Kod Okut
+        </dt>
+        <dd class="col-sm-10">
+            <a asp-action="QrKodOkut" asp-route-id="@Model.EtkinlikId">Qr Kod Okut</a>
+        </dd>
+        <dt class="col-sm-2">
+            <label>Davetliler</label>
+        </dt>
+        <dd class="col-sm-5">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <td>
+                            <strong>Adı</strong>
+                        </td>
+                        <td>
+                            <strong>Soyadı</strong>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        EtkinlikYonetim.Models.EtkinlikYonetimContext db = new EtkinlikYonetim.Models.EtkinlikYonetimContext();
+                        var davetliler = (from ek in db.EyEtkinlikKullaniciEslesme
+                                          join e in db.EyEtkinlik
+                                          on ek.EtkinlikId equals e.EtkinlikId
+                                          join k in db.EyKullanici
+                                          on ek.KullaniciId equals k.KullaniciId
+                                          where ek.EtkinlikId == Model.EtkinlikId
+                                          select new EyKullanici
+                                          {
+                                              Ad = k.Ad,
+                                              Soyad = k.Soyad
+                                          }).ToList();
+                        foreach (var dvt in davetliler)
+                        {
+                            <tr>
+                                <td>
+                                    <a>@dvt.Ad</a>
+                                </td>
+                                <td>
+                                    <a>@dvt.Soyad</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </dd>
+    </dl>
+</div>
+<div>
+    <div id="adminListesineDon">
+        <a asp-action="Etkinlikler">Listeye geri dön</a>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var message = '@HttpContextAccessor.HttpContext.Session.GetString("kullaniciYetki")';
+        if (message == "Admin") {
+            document.getElementById("adminListesineDon").style.visibility = 'visible';
+        }
+        else {
+            document.getElementById("adminListesineDon").style.visibility = 'hidden';
+        }
+</script>

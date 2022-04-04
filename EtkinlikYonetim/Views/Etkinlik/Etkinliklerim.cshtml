@@ -1,0 +1,57 @@
+﻿@model List<EtkinlikYonetim.Models.EyEtkinlikKullaniciEslesme>
+
+
+@{
+    ViewData["Title"] = "Etkinliklerim";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h1>Etkinliklerim</h1>
+
+<table id="etkinlikTablosu" class="table">
+    <thead>
+        <tr>
+            <th>
+                Etkinlik Adı
+            </th>
+            <th>
+                Başlangıç Tarihi
+            </th>
+            <th>
+                Bitiş Tarihi
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr id="aktifSatir" class=@(item.Etkinlik.BitisTarihi < DateTime.Now && item.girisYapildi ? "table-warning" : "null")>
+                <td>
+                    @item.Etkinlik.EtkinlikAdi
+                </td>
+                <td>
+                    @item.Etkinlik.BaslangicTarihi
+                </td>
+                <td>
+                    @item.Etkinlik.BitisTarihi
+                </td>
+                <td>
+                    <a asp-action="EtkinlikDetay" asp-route-id="@item.Etkinlik.EtkinlikId">Detay</a> |
+                    <a asp-action="QrKodOlustur" asp-route-id="@item.Etkinlik.EtkinlikId">QrKod Oluştur</a>
+                </td>
+            </tr>
+
+        }
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    window.onload = function changeRawColor() {
+        //alert("alert calisti");
+        ////trTag.className = "table-success";
+        ////document.getElementById("aktifSatir").classList.add(table-success);
+        //document.getElementById("aktifSatir").className = "table-success";
+    }
+</script>
