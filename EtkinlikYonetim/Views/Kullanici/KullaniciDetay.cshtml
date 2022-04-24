@@ -5,50 +5,48 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Kullanıcı Detay</h1>
-<br />
+<div class="container">
 
-<div>
-    <dl class="row">
-        <dt class="col-sm-2">
-            Ad
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Ad)
-        </dd>
-        <dt class="col-sm-2">
-            Soyad
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Soyad)
-        </dd>
-        <dt class="col-sm-2">
-            Telefon No
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.TelefonNo)
-        </dd>
-        <dt class="col-sm-2">
-            TC No
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.TcNo)
-        </dd>
-        <dt class="col-sm-2">
-            Sifre
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Sifre)
-        </dd>
-        <dt class="col-sm-2">
-            Yetki
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Yetki)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="KullaniciDuzenle" asp-route-id="@Model.KullaniciId">Düzenle</a> |
-    <a asp-action="Kullanicilar">Listeye geri dön</a>
+    <h1>Kullanıcı Detay</h1>
+    <br />
+    <div>
+        <dl class="row">
+            <dt class="col-sm-2">
+                <strong>Ad:</strong>
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Ad)
+            </dd>
+            <dt class="col-sm-2">
+                <strong>Soyad:</strong>
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Soyad)
+            </dd>
+            <dt class="col-sm-2">
+                <strong>Telefon No:</strong>
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.TelefonNo)
+            </dd>
+            <dt class="col-sm-2">
+                <strong>TC No:</strong>
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.TcNo)
+            </dd>
+            <dt class="col-sm-2">
+                <strong>Sifre:</strong>
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Sifre)
+            </dd>
+            <dt class="col-sm-2">
+                <strong>Yetki:</strong>
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Yetki)
+            </dd>
+        </dl>
+    </div>
 </div>

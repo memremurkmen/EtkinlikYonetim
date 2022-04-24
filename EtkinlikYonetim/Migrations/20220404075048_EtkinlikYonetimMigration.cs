@@ -99,10 +99,10 @@ namespace EtkinlikYonetim.Migrations
          //name: "isDeleted",
          //table: "EY_etkinlik",
          //nullable: true);
-            migrationBuilder.AddColumn<bool>(
-         name: "girisYapildi",
-         table: "EY_etkinlikKullaniciEslesme",
-         nullable: true);
+         //   migrationBuilder.AddColumn<bool>(
+         //name: "girisYapildi",
+         //table: "EY_etkinlikKullaniciEslesme",
+         //nullable: true);
 
         }
 
@@ -120,10 +120,10 @@ namespace EtkinlikYonetim.Migrations
          //name: "isDeleted",
          //table: "EY_etkinlik",
          //nullable: true);
-            migrationBuilder.AddColumn<bool>(
-         name: "girisYapildi",
-         table: "EY_etkinlikKullaniciEslesme",
-         nullable: true);
+         //   migrationBuilder.AddColumn<bool>(
+         //name: "girisYapildi",
+         //table: "EY_etkinlikKullaniciEslesme",
+         //nullable: true);
             //migrationBuilder.DropTable(
             //    name: "EY_etkinlikKullaniciEslesme");
 

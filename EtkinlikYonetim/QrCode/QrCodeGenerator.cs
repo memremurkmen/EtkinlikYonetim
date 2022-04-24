@@ -19,9 +19,9 @@ namespace EtkinlikYonetim.QrCode
         public static Bitmap GenerateImage(string url)
         {
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode(url, QRCodeGenerator.ECCLevel.Q, true, true);
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(url, QRCodeGenerator.ECCLevel.Q);
             QRCode qrCode = new QRCode(qrCodeData);
-            Bitmap qrCodeImage = qrCode.GetGraphic(10);
+            Bitmap qrCodeImage = qrCode.GetGraphic(20);
             return qrCodeImage;
         }
 

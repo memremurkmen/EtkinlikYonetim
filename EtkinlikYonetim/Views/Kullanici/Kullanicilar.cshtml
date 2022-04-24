@@ -1,60 +1,157 @@
 ﻿@model IEnumerable<EtkinlikYonetim.Models.EyKullanici>
 
 @{
-    ViewData["Title"] = "Kullanicilar";
+    ViewData["Title"] = "Kullanıcılar";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="container-fluid">
+    <p>
+        <h1>Kullanıcılar</h1>
+        @*<input type="button" class="btn btn-success" onclick="location.href='@Url.Action("KullaniciOlustur", "Kullanici")'" value="Yeni Kullanıcı Oluştur" />*@
+    </p>
 
-<h1>Kullanıcılar</h1>
+    @(Html.Kendo().Grid(Model)
+               .Name("Grid")
+               .Columns(columns =>
+               {
+                   columns.Bound(c => c.Ad).Title("Ad");
+                   columns.Bound(c => c.Soyad).Title("Soyad");
+                   columns.Bound(c => c.TelefonNo).Title("Telefon No");
+                   columns.Bound(c => c.TcNo).Title("TC No");
+                   columns.Bound(c => c.Sifre).Title("Şifre");
+                   columns.Bound(c => c.Yetki).Filterable(ftb => ftb.Multi(true)).Title("Yetki");
+                   columns.Command(command =>
+                   {
+                       command.Edit().Text("Düzenle");
+                       //command.Custom("Detay").IconClass("k-icon k-i-info").Click("kullaniciDetay");
+                       command.Custom("Sil").IconClass("k-icon k-i-close").Click("kullaniciSil");
+                   });
+               })
+               .ToolBar(toolBar =>
+               {
+                   toolBar.Create().Text("Kullanıcı Ekle");
+               })
+               .Editable(editable => editable.Mode(GridEditMode.InLine))
+               .Pageable()
+               .Filterable()
+               .Sortable(true)
+               .ClientDetailTemplateId("template")
+               .DataSource(dataSource => dataSource
+                   .Ajax()
+                   //.Batch(true)
+                   .PageSize(10)
+                   .Model(model => {
+                       model.Id(p => p.KullaniciId);
+                       model.Field(p => p.KullaniciId).Editable(false);
+                       model.Field(p => p.Ad);
+                       model.Field(p => p.Soyad);
+                       model.Field(p => p.TelefonNo);
+                       model.Field(p => p.TcNo);
+                       model.Field(p => p.Sifre);
+                       model.Field(p => p.Yetki).DefaultValue("Personel");
 
-<p>
-    <a asp-action="KullaniciOlustur">Yeni Kullanıcı Oluştur</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Ad
-            </th>
-            <th>
-                Soyad
-            </th>
-            <th>
-                Telefon No
-            </th>
-            <th>
-                TC No
-            </th>
-            <th>
-                Yetki
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ad)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Soyad)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TelefonNo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TcNo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Yetki)
-            </td>
-            <td>
-                <a asp-action="KullaniciDuzenle" asp-route-id="@item.KullaniciId">Düzenle</a> |
-                <a asp-action="KullaniciDetay" asp-route-id="@item.KullaniciId">Detay</a> |
-                <a asp-action="KullaniciSil" asp-route-id="@item.KullaniciId">Sil</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                   })
+                   .Create(update => update.Action("EditingInLine_CreateKullanici", "Kullanici"))
+                   .Update(update => update.Action("EditingInLine_UpdateKullanici", "Kullanici"))
+                   //.Create(update => update.Action("EditingPopup_Create", "Etkinlik"))
+                   //.Update(update => update.Action("EditingPopup_Update", "Etkinlik"))
+                   .ServerOperation(false)
+               )
+
+)
+</div>
+<script id="template" type="text/kendo-tmpl">
+    @(Html.Kendo().TabStrip()
+            .Name("tabStrip_#=KullaniciId#")
+            .SelectedIndex(0)
+            .Animation(animation => animation.Open(open => open.Fade(FadeDirection.In)))
+            .Items(items =>
+            {
+                items.Add().Text("Kullanıcı Detay").Content(
+                     "<div class='kullanici-details'>" +
+                         "<ul>" +
+                             "<li><label><strong>Ad:</strong></label> #= Ad #</li>" +
+                             "<li><label><strong>Soyad:</strong></label> #= Soyad #</li>" +
+                             "<li><label><strong>Telefon No:</strong></label> #= TelefonNo #</li>" +
+                             "<li><label><strong>TC No:</strong></label> #= TcNo #</li>" +
+                             "<li><label><strong>Şifre:</strong></label> #= Sifre #</li>" +
+                             "<li><label><strong>Yetki:</strong></label> #= Yetki #</li>" +
+                         "</ul>" +
+                     "</div>"
+                 );
+            }).ToClientTemplate())
+</script>
+<script type="text/javascript">
+
+
+    function kullaniciDuzenle(e) {
+        var model = this.dataItem($(e.currentTarget).closest("tr"));
+        window.location.href = "@Url.Action("KullaniciDuzenle", "Kullanici")/" + model.KullaniciId;
+    }
+    function kullaniciDetay(e) {
+        var model = this.dataItem($(e.currentTarget).closest("tr"));
+        window.location.href = "@Url.Action("KullaniciDetay", "Kullanici")/" + model.KullaniciId;
+    }
+    function kullaniciSil(e) {
+        var model = this.dataItem($(e.currentTarget).closest("tr"));
+        if (!model.isDeleted) {
+            swal({
+                title: 'Emin misiniz?',
+                text: "Kullanıcıyı silmek istediğinize emin misiniz?",
+                icon: 'warning',
+                buttons: {
+                    cancel: {
+                        text: "İptal",
+                        value: false,
+                        visible: true,
+                        closeModal: true,
+                        className: "",
+                    },
+                    confirm: {
+                        text: "Sil",
+                        value: true,
+                        visible: true,
+                        className: "",
+                        closeModal: true
+                    }
+                }
+            }).then(function (value) {
+                if (value) {
+                    $.ajax({
+                        url: "@Url.Action("KullaniciSil", "Kullanici")",
+                        type: 'POST',
+                        data: { 'id': model.KullaniciId },
+                        success: function (response) {
+                            swal({
+                                title: 'İşlem Tamam!',
+                                text: "Kullanıcı başarıyla silindi.",
+                                icon: 'success',
+                                buttons: {
+                                    confirm: {
+                                        text: "Tamam",
+                                        value: true,
+                                        visible: true,
+                                        className: "",
+                                        closeModal: true
+                                    }
+                                }
+                            }).then(function () {
+                                location.reload();
+                            })
+                        },
+                        error: function (response) {
+                        }
+                    });
+                }
+                else {
+                    swal(
+                        'İptal Edildi!',
+                        'Kullanıcı silinmedi.',
+                        'error'
+                    )
+                }
+
+            })
+        }
+    }
+</script>

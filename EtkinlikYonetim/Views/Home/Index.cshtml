@@ -1,4 +1,49 @@
-﻿@{
+﻿@model IEnumerable<EyEtkinlik>
+
+@{
     ViewData["Title"] = "Ana Sayfa";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="container-fluid">
+
+    @(Html.Kendo().Scheduler<SchedulerTask>()
+        .Name("scheduler")
+        .Date(new DateTime(2022, 4, 21))
+        .StartTime(new DateTime(2022, 4, 21, 9, 00, 00))
+        .EndTime(new DateTime(2022, 4, 21, 18, 00, 00))
+        .Height(600)
+        .Views(views =>
+        {
+            views.DayView();
+            views.WeekView();
+            views.MonthView();
+            views.YearView();
+        })
+        .Footer(false)
+        .DataSource(d => d
+        .Events(e => e.Error("onError"))
+            .Model(m =>
+            {
+                m.Id(f => f.TaskID);
+                m.Field(f => f.Title).DefaultValue("title yok");
+                m.Field(f => f.Description).DefaultValue("aciklama yok");
+            })
+            .Read("Basic_Usage_Read", "Home")
+        )
+    )
+</div>
+<script type="text/javascript">
+
+    function onError(e) {
+        this.cancelChanges();
+
+        var errorMessage = "";
+        if (e.errors) {
+            for (var error in e.errors) {
+                errorMessage += e.errors[error].errors[0] + " ";
+            }
+        }
+
+        alert(errorMessage);
+    }
+</script>

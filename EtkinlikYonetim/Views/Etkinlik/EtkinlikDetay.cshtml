@@ -7,10 +7,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Etkinlik Detay</h1>
-<br />
 
-<div>
+
+<div class="container">
+    <h1>Etkinlik Detay</h1>
+    <br />
     <dl class="row">
         <dt class="col-sm-2">
             Etkinlik Adı
@@ -36,11 +37,11 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.BitisTarihi)
         </dd>
-        <dt class="col-sm-2">
+        <dt class="qrKodOkut col-sm-2">
             Qr Kod Okut
         </dt>
-        <dd class="col-sm-10">
-            <a asp-action="QrKodOkut" asp-route-id="@Model.EtkinlikId">Qr Kod Okut</a>
+        <dd class="qrKodOkut col-sm-10">
+            <input type="button" class="btn btn-dark" onclick="location.href='@Url.Action("QrCodeRead", "Etkinlik")'" value="Qr Kod Okut" />
         </dd>
         <dt class="col-sm-2">
             <label>Davetliler</label>
@@ -88,18 +89,13 @@
         </dd>
     </dl>
 </div>
-<div>
-    <div id="adminListesineDon">
-        <a asp-action="Etkinlikler">Listeye geri dön</a>
-    </div>
-</div>
-
 <script type="text/javascript">
     var message = '@HttpContextAccessor.HttpContext.Session.GetString("kullaniciYetki")';
-        if (message == "Admin") {
-            document.getElementById("adminListesineDon").style.visibility = 'visible';
-        }
-        else {
-            document.getElementById("adminListesineDon").style.visibility = 'hidden';
-        }
+    if (message == "Personel") {
+        $(".qrKodOkut").hide();
+    }
+    else {
+        $(".qrKodOkut").show();
+    }
 </script>
+

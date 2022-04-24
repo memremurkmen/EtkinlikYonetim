@@ -13,7 +13,7 @@ namespace EtkinlikYonetim.Controllers
         EtkinlikYonetimContext db = new EtkinlikYonetimContext();
         public ActionResult Hesabım()
         {
-            return View(db.EyKullanici.Find(HttpContext.Session.GetInt32("kullaniciId")));
+            return View(db.EyKullanici.Find(Guid.Parse(HttpContext.Session.GetString("kullaniciId"))));//sessionda tutulan kullanıcıId sine göre veriyi viewa gönderiyor
         }
 
         [HttpPost]
@@ -21,16 +21,21 @@ namespace EtkinlikYonetim.Controllers
         public ActionResult Hesabım(EyKullanici yeniKullanici)
         {
             var eskiKullanici = db.EyKullanici.Where(a => a.KullaniciId == yeniKullanici.KullaniciId).FirstOrDefault();
-            var kullaniciTelefonNoKontrol = db.EyKullanici.Where(a => a.TelefonNo == yeniKullanici.TelefonNo).FirstOrDefault();
-            if (kullaniciTelefonNoKontrol != null && eskiKullanici.TelefonNo != kullaniciTelefonNoKontrol.TelefonNo)
+            bool kullaniciTelefonNoKontrol = db.EyKullanici.Any(a => a.TelefonNo == yeniKullanici.TelefonNo && a.TelefonNo != eskiKullanici.TelefonNo);
+            bool kullaniciTcNoKontrol = db.EyKullanici.Any(a => a.TcNo == yeniKullanici.TcNo && a.TcNo != eskiKullanici.TcNo);
+            if (kullaniciTelefonNoKontrol || kullaniciTcNoKontrol)//kullanıcının değiştirdiği telefonNo veya tcNo başka kullanıcıyla aynı mı diye kontrol ediliyor.
             {
                 return View("Hesabım");
             }
             eskiKullanici.Ad = yeniKullanici.Ad;
             eskiKullanici.Soyad = yeniKullanici.Soyad;
             eskiKullanici.TelefonNo = yeniKullanici.TelefonNo;
+            eskiKullanici.TcNo = yeniKullanici.TcNo;
             eskiKullanici.Sifre = yeniKullanici.Sifre;
             db.SaveChanges();
+            HttpContext.Session.SetString("kullaniciAdi", yeniKullanici.Ad);
+            HttpContext.Session.SetString("kullaniciSoyadi", yeniKullanici.Soyad);
+            HttpContext.Session.SetString("kullaniciTc", yeniKullanici.TcNo);
             try
             {
                 return RedirectToAction("","");

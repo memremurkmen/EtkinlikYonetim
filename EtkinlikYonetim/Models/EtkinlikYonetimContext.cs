@@ -12,8 +12,7 @@ namespace EtkinlikYonetim.Models
         {
         }
 
-        public EtkinlikYonetimContext(DbContextOptions<EtkinlikYonetimContext> options)
-            : base(options)
+        public EtkinlikYonetimContext(DbContextOptions<EtkinlikYonetimContext> options) : base(options)
         {
         }
 
@@ -78,7 +77,7 @@ namespace EtkinlikYonetim.Models
                 entity.HasOne(d => d.Kullanici)
                     .WithMany(p => p.EyEtkinlikKullaniciEslesmes)
                     .HasForeignKey(d => d.KullaniciId)
-                    .OnDelete(DeleteBehavior.SetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_EY_etkinlikKullaniciEslesme_EY_kullanici");
             });
 
@@ -110,6 +109,8 @@ namespace EtkinlikYonetim.Models
                     .HasColumnName("tcNo")
                     .IsFixedLength(true);
 
+                entity.HasIndex(e => e.TcNo).IsUnique();
+
                 entity.Property(e => e.TelefonNo)
                     .HasMaxLength(10)
                     .HasColumnName("telefonNo");
@@ -119,9 +120,11 @@ namespace EtkinlikYonetim.Models
                     .HasColumnName("yetki");
             });
 
+            
             OnModelCreatingPartial(modelBuilder);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
     }
 }

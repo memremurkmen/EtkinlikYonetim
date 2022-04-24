@@ -19,20 +19,47 @@ namespace EtkinlikYonetim.Controllers
         EtkinlikYonetimContext db = new EtkinlikYonetimContext();
 
         [AllowAnonymous]
-        public ActionResult GirisYap()
+        public async Task<ActionResult> GirisYap()
         {
+            if (Request.Cookies["kullaniciId"] != null)
+            {
+                var kullanici = db.EyKullanici.Where(a => a.KullaniciId == Guid.Parse(Request.Cookies["kullaniciId"])).FirstOrDefault();
+                if (kullanici != null)
+                {
+                    var claims = new List<Claim>//authorize için yetki veriliyor
+                    {
+                        new Claim(ClaimTypes.Name,kullanici.TcNo),
+                        new Claim(ClaimTypes.Role,kullanici.Yetki)
+                    };
+                    var kullaniciIdentity = new ClaimsIdentity(claims, "a");
+                    ClaimsPrincipal principal = new ClaimsPrincipal(kullaniciIdentity);
+                    await HttpContext.SignInAsync(principal);
+                    HttpContext.Session.SetString("kullaniciId", kullanici.KullaniciId.ToString());//diğer controllerlarda kullanılmak üzere sessionlar kaydediliyor.
+                    HttpContext.Session.SetString("kullaniciAdi", kullanici.Ad);
+                    HttpContext.Session.SetString("kullaniciSoyadi", kullanici.Soyad);
+                    HttpContext.Session.SetString("kullaniciTc", kullanici.TcNo);
+                    HttpContext.Session.SetString("kullaniciYetki", kullanici.Yetki);
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    return View();
+                }
+
+            }
             return View();
         }
 
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> GirisYapAsync(EyKullanici k)
+        public async Task<ActionResult> GirisYap(EyKullanici k)
         {
-            var kullanici = db.EyKullanici.Where(a => a.TcNo == k.TcNo && a.Sifre == k.Sifre).FirstOrDefault();
+
+            var kullanici = db.EyKullanici.Where(a => a.TcNo == k.TcNo && a.Sifre == k.Sifre).FirstOrDefault();//viewdan gelen tc ve şifre veritabanındaki kullanıcılardan birisiyle eşleşiyor mu diye bakılıyor
             if (kullanici != null)
             {
-                var claims = new List<Claim>
+                var claims = new List<Claim>//authorize için yetki veriliyor
                 {
                     new Claim(ClaimTypes.Name,kullanici.TcNo),
                     new Claim(ClaimTypes.Role,kullanici.Yetki)
@@ -41,13 +68,17 @@ namespace EtkinlikYonetim.Controllers
                 ClaimsPrincipal principal = new ClaimsPrincipal(kullaniciIdentity);
                 await HttpContext.SignInAsync(principal);
 
-                HttpContext.Session.SetInt32("kullaniciId", kullanici.KullaniciId);
+                CookieOptions options = new CookieOptions();
+                options.Expires = DateTime.Now.AddDays(2);
+                Response.Cookies.Append("kullaniciId", kullanici.KullaniciId.ToString(), options);
+
+                HttpContext.Session.SetString("kullaniciId", kullanici.KullaniciId.ToString());//diğer controllerlarda kullanılmak üzere sessionlar kaydediliyor.
                 HttpContext.Session.SetString("kullaniciAdi", kullanici.Ad);
                 HttpContext.Session.SetString("kullaniciSoyadi", kullanici.Soyad);
                 HttpContext.Session.SetString("kullaniciTc", kullanici.TcNo);
                 HttpContext.Session.SetString("kullaniciYetki", kullanici.Yetki);
 
-                return RedirectToAction("Index", "Home");//ana sayfaya yönlendirilecek
+                return RedirectToAction("Index", "Home");
             }
             else
             {
@@ -68,13 +99,13 @@ namespace EtkinlikYonetim.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult KayitOl(EyKullanici k)
         {
-            var kullaniciKayitKontrol = db.EyKullanici.Any(a => a.TelefonNo == k.TelefonNo || a.TcNo == k.TcNo);
+            var kullaniciKayitKontrol = db.EyKullanici.Any(a => a.TelefonNo == k.TelefonNo || a.TcNo == k.TcNo);//aynı telefonNo veya tcNo var mı diye kontrol ediliyor.
             if (kullaniciKayitKontrol)
             {
                 return View("KayitOl");
             }
 
-            k.Yetki = "Personel";
+            k.Yetki = "Personel";//kayıt olan kullanıcıya otomatik personel yetkisi veriliyor.
 
             db.EyKullanici.Add(k);
             db.SaveChanges();
@@ -84,6 +115,7 @@ namespace EtkinlikYonetim.Controllers
 
         public async Task<ActionResult> CikisYapAsync()
         {
+            Response.Cookies.Delete("kullaniciId");
             await HttpContext.SignOutAsync();
             return RedirectToAction("GirisYap", "GirisVeKayit");
         }

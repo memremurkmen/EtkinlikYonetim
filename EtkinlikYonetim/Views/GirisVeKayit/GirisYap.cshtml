@@ -1,4 +1,5 @@
-﻿
+﻿@model EtkinlikYonetim.Models.EyKullanici
+
 
 @{
     ViewData["Title"] = "Giriş Yap";
@@ -27,13 +28,13 @@
             <div class="row justify-content-center">
                 <div class="col-md-6 col-lg-4">
                     <div class="login-wrap p-0">
-                        @using (Html.BeginForm("GirisYap", "GirisVeKayit", FormMethod.Post))
-                        {
+                        <form asp-action="GirisYap">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="form-group">
-                                <input type="text" id="tcNo" name="tcNo" class="form-control" placeholder="TC No" required>
+                                <input type="text" asp-for="TcNo" class="form-control" placeholder="TC No" required>
                             </div>
                             <div class="form-group">
-                                <input id="sifre" type="password" name="sifre" class="form-control" placeholder="Şifre" required>
+                                <input type="password" asp-for="Sifre" class="form-control" placeholder="Şifre" required>
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="form-control btn btn-primary submit px-3">Giriş Yap</button>
@@ -43,16 +44,13 @@
                                     <a href="KayitOl" style="color: #838181">Kayıt Ol</a>
                                 </div>
                             </div>
-                        }
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <script src="~/Templates/login-form-20/js/popper.js"></script>
-    <script src="~/Templates/login-form-20/js/bootstrap.min.js"></script>
-    <script src="~/Templates/login-form-20/js/main.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

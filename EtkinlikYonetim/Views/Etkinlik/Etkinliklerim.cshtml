@@ -1,57 +1,91 @@
-﻿@model List<EtkinlikYonetim.Models.EyEtkinlikKullaniciEslesme>
-
+﻿@model IEnumerable<EyEtkinlikKullaniciEslesme>
 
 @{
     ViewData["Title"] = "Etkinliklerim";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="container-fluid">
+    <p>
+        <h1>Etkinliklerim</h1>
+    </p>
+    @(Html.Kendo().Grid(Model)
+               .Name("Grid")
+               .Columns(columns =>
+               {
+                   columns.Bound(c => c.Etkinlik.EtkinlikAdi).Title("Etkinlik Adı");
+                   columns.Bound(c => c.Etkinlik.BaslangicTarihi).Format("{0:dd/MM/yyyy HH:mm:ss}").Title("Başlangıç Tarihi");
+                   columns.Bound(c => c.Etkinlik.BitisTarihi).Format("{0:dd/MM/yyyy HH:mm:ss}").Title("Bitiş Tarihi");
+                   columns.Bound(c => c.girisYapildi).Title("Giriş Yapıldı").ClientTemplate("<span id='badge_#=Etkinlik.EtkinlikId#' class='badgeTemplate'></span>");
+                   columns.Command(command =>
+                   {
+                       command.Custom("Qr Kod Oluştur").IconClass("k-icon k-i-qr-code").Click("qrKodOlustur");
+                   });
+
+               })
+               .Events(events => events.DataBound("onDataBound"))
+               .Pageable()
+               .Sortable(true)
+               .Filterable()
+               .ClientDetailTemplateId("template")
+               .DataSource(dataSource => dataSource
+                   .Ajax()
+                   .PageSize(10)
+                   .Model(model =>
+                   {
+                       model.Id(p => p.EtkinlikId);
+                   })
+                   .ServerOperation(false)
+               )
+)
+</div>
+<script id="template" type="text/kendo-tmpl">
+    @(Html.Kendo().TabStrip()
+            .Name("tabStrip_#=EtkinlikId#")
+            .SelectedIndex(0)
+            .Animation(animation => animation.Open(open => open.Fade(FadeDirection.In)))
+            .Items(items =>
+            {
+                items.Add().Text("Etkinlik Detay").Content(
+                     "<div class='etkinlik-details'>" +
+                         "<ul>" +
+                             "<li><label><strong>Etkinlik Adı:</strong></label> #= Etkinlik.EtkinlikAdi #</li>" +
+                             "<li><label><strong>Max Katılımcı Sayısı:</strong></label> #= Etkinlik.MaxKatilimciSayisi #</li>" +
+                             "<li><label><strong>Başlangıç Tarihi:</strong></label> #= Etkinlik.BaslangicTarihi #</li>" +
+                             "<li><label><strong>Bitiş Tarihi:</strong></label> #= Etkinlik.BitisTarihi #</li>" +
+                         "</ul>" +
+                     "</div>"
+                 );
+            }).ToClientTemplate())
 
 
-<h1>Etkinliklerim</h1>
-
-<table id="etkinlikTablosu" class="table">
-    <thead>
-        <tr>
-            <th>
-                Etkinlik Adı
-            </th>
-            <th>
-                Başlangıç Tarihi
-            </th>
-            <th>
-                Bitiş Tarihi
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr id="aktifSatir" class=@(item.Etkinlik.BitisTarihi < DateTime.Now && item.girisYapildi ? "table-warning" : "null")>
-                <td>
-                    @item.Etkinlik.EtkinlikAdi
-                </td>
-                <td>
-                    @item.Etkinlik.BaslangicTarihi
-                </td>
-                <td>
-                    @item.Etkinlik.BitisTarihi
-                </td>
-                <td>
-                    <a asp-action="EtkinlikDetay" asp-route-id="@item.Etkinlik.EtkinlikId">Detay</a> |
-                    <a asp-action="QrKodOlustur" asp-route-id="@item.Etkinlik.EtkinlikId">QrKod Oluştur</a>
-                </td>
-            </tr>
-
-        }
-    </tbody>
-</table>
-
+</script>
 <script type="text/javascript">
-    window.onload = function changeRawColor() {
-        //alert("alert calisti");
-        ////trTag.className = "table-success";
-        ////document.getElementById("aktifSatir").classList.add(table-success);
-        //document.getElementById("aktifSatir").className = "table-success";
+
+    function onDataBound(e) {
+        var grid = this;
+        grid.table.find("tr").each(function () {
+            var dataItem = grid.dataItem(this);
+            var themeColor = dataItem.girisYapildi ? 'success' : 'error';
+            var text = dataItem.girisYapildi ? 'Giriş yapıldı' : 'Giriş yapılmadı';
+
+            $(this).find('script').each(function () {
+                eval($(this).html());
+            });
+
+            $(this).find(".badgeTemplate").kendoBadge({
+                themeColor: themeColor,
+                text: text,
+            });
+
+            kendo.bind($(this), dataItem);
+        });
+    }
+    function etkinlikDetay(e) {
+        var model = this.dataItem($(e.currentTarget).closest("tr"));
+        window.location.href = "@Url.Action("EtkinlikDetay", "Etkinlik")/" + model.Etkinlik.EtkinlikId;
+    }
+    function qrKodOlustur(e) {
+        var model = this.dataItem($(e.currentTarget).closest("tr"));
+        window.location.href = "@Url.Action("QrKodOlustur", "Etkinlik")/" + model.Etkinlik.EtkinlikId;
     }
 </script>

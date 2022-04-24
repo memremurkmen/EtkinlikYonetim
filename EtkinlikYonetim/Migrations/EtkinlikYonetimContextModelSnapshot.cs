@@ -22,11 +22,10 @@ namespace EtkinlikYonetim.Migrations
 
             modelBuilder.Entity("EtkinlikYonetim.Models.EyEtkinlik", b =>
                 {
-                    b.Property<int>("EtkinlikId")
+                    b.Property<Guid>("EtkinlikId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("etkinlikID")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("etkinlikID");
 
                     b.Property<DateTime?>("BaslangicTarihi")
                         .IsRequired()
@@ -52,7 +51,7 @@ namespace EtkinlikYonetim.Migrations
                     b.Property<DateTime?>("deleteDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool?>("isDeleted")
+                    b.Property<bool>("isDeleted")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("updateDate")
@@ -65,18 +64,17 @@ namespace EtkinlikYonetim.Migrations
 
             modelBuilder.Entity("EtkinlikYonetim.Models.EyEtkinlikKullaniciEslesme", b =>
                 {
-                    b.Property<int>("EtkinlikKullaniciEslesmeId")
+                    b.Property<Guid>("EtkinlikKullaniciEslesmeId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("etkinlikKullaniciEslesmeID")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("etkinlikKullaniciEslesmeID");
 
-                    b.Property<int?>("EtkinlikId")
-                        .HasColumnType("int")
+                    b.Property<Guid?>("EtkinlikId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("etkinlikId");
 
-                    b.Property<int?>("KullaniciId")
-                        .HasColumnType("int")
+                    b.Property<Guid?>("KullaniciId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("kullaniciId");
 
                     b.Property<bool>("girisYapildi")
@@ -93,11 +91,10 @@ namespace EtkinlikYonetim.Migrations
 
             modelBuilder.Entity("EtkinlikYonetim.Models.EyKullanici", b =>
                 {
-                    b.Property<int>("KullaniciId")
+                    b.Property<Guid>("KullaniciId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("kullaniciID")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("kullaniciID");
 
                     b.Property<string>("Ad")
                         .IsRequired()
@@ -137,6 +134,9 @@ namespace EtkinlikYonetim.Migrations
                         .HasColumnName("yetki");
 
                     b.HasKey("KullaniciId");
+
+                    b.HasIndex("TcNo")
+                        .IsUnique();
 
                     b.HasIndex(new[] { "TcNo" }, "UQ__EY_kulla__E078675086B74C3F")
                         .IsUnique();

@@ -26,8 +26,15 @@ using EtkinlikYonetim.Models;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 3 "C:\Users\emret\source\repos\EtkinlikYonetim\EtkinlikYonetim\Views\_ViewImports.cshtml"
+using Kendo.Mvc.UI;
+
+#line default
+#line hidden
+#nullable disable
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"4daf0f5f65a85d9c51987e40d98a66be0c7d6a14", @"/Views/Kullanici/KullaniciSil.cshtml")]
-    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"293c9546e0db18dcf7ac9ef9482390f5f9472ad9", @"/Views/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"ce1fc9304db5fe5748f4e7250fa5826af8d81118", @"/Views/_ViewImports.cshtml")]
     #nullable restore
     public class Views_Kullanici_KullaniciSil : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<EtkinlikYonetim.Models.EyKullanici>
     #nullable disable
@@ -121,9 +128,9 @@ using EtkinlikYonetim.Models;
 #line hidden
 #nullable disable
             WriteLiteral("\r\n        </dd>\r\n    </dl>\r\n    \r\n    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "4daf0f5f65a85d9c51987e40d98a66be0c7d6a147435", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "4daf0f5f65a85d9c51987e40d98a66be0c7d6a147622", async() => {
                 WriteLiteral("\r\n        ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("input", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "4daf0f5f65a85d9c51987e40d98a66be0c7d6a147701", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("input", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "4daf0f5f65a85d9c51987e40d98a66be0c7d6a147888", async() => {
                 }
                 );
                 __Microsoft_AspNetCore_Mvc_TagHelpers_InputTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.TagHelpers.InputTagHelper>();
@@ -146,7 +153,7 @@ __Microsoft_AspNetCore_Mvc_TagHelpers_InputTagHelper.For = ModelExpressionProvid
                 Write(__tagHelperExecutionContext.Output);
                 __tagHelperExecutionContext = __tagHelperScopeManager.End();
                 WriteLiteral("\r\n        <input type=\"submit\" value=\"Sil\" class=\"btn btn-danger\" /> |\r\n        ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "4daf0f5f65a85d9c51987e40d98a66be0c7d6a149509", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "4daf0f5f65a85d9c51987e40d98a66be0c7d6a149696", async() => {
                     WriteLiteral("Listeye geri dön");
                 }
                 );

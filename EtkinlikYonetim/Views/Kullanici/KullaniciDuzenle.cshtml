@@ -5,61 +5,65 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<div class="container">
 
-<h1>Kullanıcı Düzenle</h1>
-<br />
+    <h1>Kullanıcı Düzenle</h1>
+    <br />
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="KullaniciDuzenle">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="KullaniciId" />
-            <div class="form-group">
-                <label asp-for="Ad" class="control-label">Ad</label>
-                <input asp-for="Ad" class="form-control" />
-                <span asp-validation-for="Ad" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Soyad" class="control-label">Soyad</label>
-                <input asp-for="Soyad" class="form-control" />
-                <span asp-validation-for="Soyad" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TelefonNo" class="control-label">Telefon No</label>
-                <input asp-for="TelefonNo" class="form-control" />
-                <span asp-validation-for="TelefonNo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TcNo" class="control-label">TC No</label>
-                <input asp-for="TcNo" class="form-control" />
-                <span asp-validation-for="TcNo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Sifre" class="control-label">Sifre</label>
-                <input asp-for="Sifre" class="form-control" />
-                <span asp-validation-for="Sifre" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Yetki" class="control-label">Yetki</label>
-                <select asp-for="Yetki" class="form-control selectpicker">
-                    <option value="@Model.Yetki" selected>@Model.Yetki</option>
-                    <option value="Personel">Personel</option>
-                    <option value="Yetkili">Yetkili</option>
-                    <option value="Admin">Admin</option>
-                </select>
-                <span asp-validation-for="Yetki" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Kaydet" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="row">
+        <div class="col-md-4">
+            @if (!string.IsNullOrEmpty(ViewBag.KullaniciControlText))
+            {
+                <div>
+                    @ViewBag.KullaniciControlText
+                </div>
+            }
+            <form asp-action="KullaniciDuzenle">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="KullaniciId" />
+                <div class="form-group">
+                    <label asp-for="Ad" class="control-label">Ad</label>
+                    <input asp-for="Ad" class="form-control" />
+                    <span asp-validation-for="Ad" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Soyad" class="control-label">Soyad</label>
+                    <input asp-for="Soyad" class="form-control" />
+                    <span asp-validation-for="Soyad" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="TelefonNo" class="control-label">Telefon No</label>
+                    <input asp-for="TelefonNo" class="form-control" />
+                    <span asp-validation-for="TelefonNo" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="TcNo" class="control-label">TC No</label>
+                    <input asp-for="TcNo" class="form-control" />
+                    <span asp-validation-for="TcNo" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Sifre" class="control-label">Sifre</label>
+                    <input asp-for="Sifre" class="form-control" />
+                    <span asp-validation-for="Sifre" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Yetki" class="control-label">Yetki</label>
+                    <select asp-for="Yetki" class="form-control selectpicker">
+                        <option value="@Model.Yetki" selected>@Model.Yetki</option>
+                        <option value="Personel">Personel</option>
+                        <option value="Yetkili">Yetkili</option>
+                        <option value="Admin">Admin</option>
+                    </select>
+                    <span asp-validation-for="Yetki" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Kaydet" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Kullanicilar">Listeye geri dön</a>
 </div>
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
